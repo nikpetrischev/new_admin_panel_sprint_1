@@ -8,11 +8,11 @@ CREATE TABLE IF NOT EXISTS content.film_work (
     description TEXT,
     creation_date DATE NOT NULL,
     rating FLOAT,
-    type TEXT NOT NULL,  -- TODO: Create separate table or enum with types
+    type TEXT NOT NULL,
     created TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     modified TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-    CHECK (LENGTH(description) < 1024 AND description <> ''),
-    CHECK (LENGTH(type) < 128 AND type <> ''),
+    CHECK (LENGTH(description) < 1024),
+    CHECK (LENGTH(type) < 128),
     CHECK (rating BETWEEN 0 AND 100)
 );
 
@@ -21,7 +21,7 @@ CREATE TABLE IF NOT EXISTS content.person (
     full_name TEXT NOT NULL,
     created TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     modified TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-    CHECK (LENGTH(full_name) < 256 AND full_name <> '')
+    CHECK (LENGTH(full_name) < 256)
 );
 
 CREATE TABLE IF NOT EXISTS content.genre (
@@ -30,8 +30,8 @@ CREATE TABLE IF NOT EXISTS content.genre (
     description TEXT,
     created TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     modified TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-    CHECK (LENGTH(name) < 32 AND name <> ''),
-    CHECK (LENGTH(description) < 1024 AND description <> '')
+    CHECK (LENGTH(name) < 32),
+    CHECK (LENGTH(description) < 1024)
 );
 
 CREATE TABLE IF NOT EXISTS content.person_film_work (
@@ -40,7 +40,7 @@ CREATE TABLE IF NOT EXISTS content.person_film_work (
     film_work_id UUID NOT NULL REFERENCES content.film_work(id),
     role TEXT NOT NULL,
     created TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-    CHECK (LENGTH(role) < 128 AND role <> '')
+    CHECK (LENGTH(role) < 128)
 );
 
 CREATE TABLE IF NOT EXISTS content.genre_film_work (

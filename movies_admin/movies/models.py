@@ -35,7 +35,7 @@ class Genre(UUIDMixin, TimeStampedMixin):
     )
 
     class Meta:
-        db_table = "content\".\"genre"
+        db_table = 'genre'
         verbose_name = _('Genre')
         verbose_name_plural = _('Genres')
 
@@ -51,7 +51,7 @@ class Person(UUIDMixin, TimeStampedMixin):
     )
     
     class Meta:
-        db_table = "content\".\"person"
+        db_table = 'person'
         indexes = [
             models.Index(fields=['full_name'], name='person_full_name_idx'),
         ]
@@ -66,25 +66,26 @@ class FilmWork(UUIDMixin, TimeStampedMixin):
     title = models.TextField(_('title'), blank=False)
     description = models.TextField(
         _('description'),
-        blank=False,
+        blank=True,
         null=True,
         max_length=1024,
     )
     creation_date = models.DateField(_('creation_date'))
     rating = models.FloatField(
         _('rating'),
+        null=True,
         validators=[
             MinValueValidator(0),
             MaxValueValidator(100),
         ],
     )
-    type = models.CharField(_('type'), blank=False, max_length=128)
+    type = models.TextField(_('type'), blank=False, max_length=128)
     
     genres = models.ManyToManyField(Genre, through='GenreFilmWork')
     persons = models.ManyToManyField(Person, through='PersonFilmWork')
 
     class Meta:
-        db_table = "content\".\"film_work"
+        db_table = 'film_work'
         indexes = [
             models.Index(fields=['creation_date'], name='film_work_creation_date_idx'),
             models.Index(fields=['type'], name='film_work_type_idx'),
@@ -109,7 +110,7 @@ class GenreFilmWork(UUIDMixin):
                 name='film_work_genre_idx',
             ),
         ]
-        db_table = "content\".\"genre_film_work" 
+        db_table = 'genre_film_work'
 
 
 class PersonFilmWork(UUIDMixin):
@@ -125,4 +126,4 @@ class PersonFilmWork(UUIDMixin):
                 name='film_work_person_role_idx',
             ),
         ]
-        db_table = "content\".\"person_film_work"
+        db_table = 'person_film_work'
