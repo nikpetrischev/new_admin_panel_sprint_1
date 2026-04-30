@@ -1,24 +1,8 @@
-import uuid
-
 from django.core.validators import MaxValueValidator, MinValueValidator, MaxLengthValidator
 from django.db import models
-from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 
-
-class TimeStampedMixin(models.Model):
-    created = models.DateTimeField(auto_now_add=True)
-    modified = models.DateTimeField(auto_now=True)
-
-    class Meta:
-        abstract = True
-
-
-class UUIDMixin(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-
-    class Meta:
-        abstract = True 
+from .mixins import TimeStampedMixin, UUIDMixin
 
 
 class Genre(UUIDMixin, TimeStampedMixin):
@@ -80,6 +64,7 @@ class FilmWork(UUIDMixin, TimeStampedMixin):
         ],
     )
     type = models.TextField(_('type'), blank=False, max_length=128)
+    file_path  = models.FileField(_('file'), blank=True, null=True, upload_to='movies/')
     
     genres = models.ManyToManyField(Genre, through='GenreFilmWork')
     persons = models.ManyToManyField(Person, through='PersonFilmWork')
