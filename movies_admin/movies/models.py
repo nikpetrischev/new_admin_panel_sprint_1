@@ -77,7 +77,7 @@ class FilmWork(UUIDMixin, TimeStampedMixin):
             models.Index(fields=['rating'], name='film_work_rating_idx'),
         ]
         verbose_name = _('Filmwork')
-        verbose_name_plural = _('Filmowrks')
+        verbose_name_plural = _('Filmworks')
 
     def __str__(self) -> str:
         return self.title
@@ -86,7 +86,7 @@ class FilmWork(UUIDMixin, TimeStampedMixin):
 class GenreFilmWork(UUIDMixin):
     film_work = models.ForeignKey('FilmWork', on_delete=models.CASCADE)
     genre = models.ForeignKey('Genre', on_delete=models.CASCADE)
-    created = models.DateTimeField(auto_now_add=True)
+    created = models.DateTimeField(_('created'), auto_now_add=True)
 
     class Meta:
         constraints = [
@@ -102,7 +102,7 @@ class PersonFilmWork(UUIDMixin):
     film_work = models.ForeignKey('FilmWork', on_delete=models.CASCADE)
     person = models.ForeignKey('Person', on_delete=models.CASCADE)
     role = models.TextField('role')
-    created = models.DateTimeField(auto_now_add=True) 
+    created = models.DateTimeField(_('created'), auto_now_add=True) 
 
     class Meta:
         constraints = [
