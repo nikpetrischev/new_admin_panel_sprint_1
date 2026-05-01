@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-30 13:42+0000\n"
+"POT-Creation-Date: 2026-05-01 08:57+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -31,12 +31,14 @@ msgid "genre"
 msgstr "genre"
 
 #: movies/mixins.py:8 movies/models.py:89 movies/models.py:105
-msgid "created"
+#, fuzzy
+#| msgid "created"
+msgid "created_at"
 msgstr "created at"
 
 #: movies/mixins.py:9
-msgid "modified"
-msgstr "modified at"
+msgid "updated_at"
+msgstr "updated at"
 
 #: movies/models.py:10
 msgid "name"
@@ -93,3 +95,6 @@ msgstr "Filmwork"
 #: movies/models.py:80
 msgid "Filmworks"
 msgstr "Filmworks"
+
+#~ msgid "modified"
+#~ msgstr "modified at"

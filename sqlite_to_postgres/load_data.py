@@ -4,15 +4,20 @@ import psycopg
 from psycopg import ClientCursor, connection as _connection
 from psycopg.rows import dict_row
 
+from sqlite_to_postgres.entites import FilmWork, Genre, Person, GenreFilmWork, PersonFilmWork
+from sqlite_to_postgres.services import PostgresSaver, SQLiteLoader
+
+
+DB_TABLES = ('film_work', 'person', 'genre', 'person_film_work', 'genre_film_work')
 
 def load_from_sqlite(connection: sqlite3.Connection, pg_conn: _connection):
     """Основной метод загрузки данных из SQLite в Postgres"""
-    # postgres_saver = PostgresSaver(pg_conn)
-    # sqlite_loader = SQLiteLoader(connection)
+    postgres_saver = PostgresSaver(pg_conn)
+    sqlite_loader = SQLiteLoader(connection)
 
-    # data = sqlite_loader.load_movies()
-    # postgres_saver.save_all_data(data)
-
+    for table in DB_TABLES:
+        for batch in sqlite_loader.load_data(table):
+            postgres_saver.save_all_data(batch)
 
 if __name__ == '__main__':
     dsl = {'dbname': 'movies_database', 'user': 'app', 'password': '123qwe', 'host': '127.0.0.1', 'port': 5432}

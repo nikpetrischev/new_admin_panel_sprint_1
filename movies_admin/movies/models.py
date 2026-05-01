@@ -54,7 +54,7 @@ class FilmWork(UUIDMixin, TimeStampedMixin):
         null=True,
         max_length=1024,
     )
-    creation_date = models.DateField(_('creation_date'))
+    creation_date = models.DateField(_('creation_date'), null=True)
     rating = models.FloatField(
         _('rating'),
         null=True,
@@ -86,7 +86,7 @@ class FilmWork(UUIDMixin, TimeStampedMixin):
 class GenreFilmWork(UUIDMixin):
     film_work = models.ForeignKey('FilmWork', on_delete=models.CASCADE)
     genre = models.ForeignKey('Genre', on_delete=models.CASCADE)
-    created = models.DateTimeField(_('created'), auto_now_add=True)
+    created_at = models.DateTimeField(_('created_at'), auto_now_add=True)
 
     class Meta:
         constraints = [
@@ -102,7 +102,7 @@ class PersonFilmWork(UUIDMixin):
     film_work = models.ForeignKey('FilmWork', on_delete=models.CASCADE)
     person = models.ForeignKey('Person', on_delete=models.CASCADE)
     role = models.TextField('role')
-    created = models.DateTimeField(_('created'), auto_now_add=True) 
+    created_at = models.DateTimeField(_('created_at'), auto_now_add=True) 
 
     class Meta:
         constraints = [
