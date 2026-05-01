@@ -1,11 +1,12 @@
 import sqlite3
 from contextlib import contextmanager
 from dataclasses import astuple, fields
-from typing import Any, Generator, Sequence, TypeVar
+from typing import Generator, Sequence, TypeVar
 
-from psycopg import Connection, sql, connection as connection_
+from psycopg import sql, connection as connection_
 
-from .entites import FilmWork, Genre, Person, GenreFilmWork, PersonFilmWork
+from sqlite_to_postgres.entites import FilmWork, Genre, Person, GenreFilmWork, PersonFilmWork
+from sqlite_to_postgres.log_config import logger
 
 EntityClass = TypeVar('EntityClass', FilmWork, Genre, Person, GenreFilmWork, PersonFilmWork)
 
@@ -48,9 +49,12 @@ class SQLiteLoader:
         table_name: str,
         batch: int = 100,
     ) -> Generator[list[EntityClass], None, None]:
+        logger.info(msg=f'Извлечение данных для {table_name}')
+
         if batch < 1:
-            # TODO: log
+            logger.error(f'Невозможно читать из БД партиями по {batch} элементов')
             raise ValueError(f'Невозможно читать из БД партиями по {batch} элементов')
+        
         with conn_context(self.DB_PATH) as conn:
             curs = conn.cursor()
             try:
@@ -59,13 +63,15 @@ class SQLiteLoader:
                     .format(sql.Identifier(table_name))
                     .as_string(),
                 )
-            except BaseException as e:
-                print(str(e))
-                # TODO logging
-                ...
+            except Exception as e:
+                logger.error(msg=f'Ошибка исполнения SELECT * FROM {table_name}:\n\t{e}')
+                raise e
+            
             while data := curs.fetchmany(batch):
                 result = [DATACLASSES_MAPPER[table_name](**dict(row)) for row in data]
                 yield result
+
+        logger.info(msg=f'Извлечение данных для {table_name} завершено')
 
 
 class PostgresSaver:
@@ -73,21 +79,28 @@ class PostgresSaver:
         self.pg_conn = pg_conn
 
     def save_all_data(self, data: Sequence[EntityClass]) -> None:
+        logger.info(msg=f'Загрузка данных в {TABLES_MAPPER[type(data[0])]}')
+
         if len(data) == 0:
-            # TODO: логировать, что данных нет
+            logger.error('Нет данных для сохранения')
             raise ValueError('Нет данных для сохранения')
+    
         table_name = sql.Identifier(TABLES_MAPPER[type(data[0])])
         column_names = sql.SQL(', ').join([sql.Identifier(field.name) for field in fields(data[0])])
         values_placeholder = sql.SQL(', ').join(sql.Placeholder() * len(fields(data[0])))
         values = [astuple(entity) for entity in data]
-        from pprint import pprint
-        pprint(values)
 
         with self.pg_conn.cursor() as cursor:
-            cursor.executemany(
-                (
-                    sql.SQL('INSERT INTO {} ({}) VALUES ({}) ON CONFLICT DO NOTHING')
-                    .format(table_name, column_names, values_placeholder)
-                ),
-                values,
-            )
+            try:
+                cursor.executemany(
+                    (
+                        sql.SQL('INSERT INTO {} ({}) VALUES ({}) ON CONFLICT DO NOTHING')
+                        .format(table_name, column_names, values_placeholder)
+                    ),
+                    values,
+                )
+            except Exception as e:
+                logger.error(msg=f'При загрузке данных в {table_name.as_string()} произошла ошибка:\n\t{e}')
+                raise e
+
+        logger.info(msg=f'Загрузка данных в {TABLES_MAPPER[type(data[0])]} завершена')

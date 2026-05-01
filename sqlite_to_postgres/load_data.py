@@ -4,7 +4,7 @@ import psycopg
 from psycopg import ClientCursor, connection as _connection
 from psycopg.rows import dict_row
 
-from sqlite_to_postgres.entites import FilmWork, Genre, Person, GenreFilmWork, PersonFilmWork
+from sqlite_to_postgres.log_config import logger
 from sqlite_to_postgres.services import PostgresSaver, SQLiteLoader
 
 
@@ -16,6 +16,7 @@ def load_from_sqlite(connection: sqlite3.Connection, pg_conn: _connection):
     sqlite_loader = SQLiteLoader(connection)
 
     for table in DB_TABLES:
+        logger.info(msg=f'Обработка таблицы {table}')
         for batch in sqlite_loader.load_data(table):
             postgres_saver.save_all_data(batch)
 
