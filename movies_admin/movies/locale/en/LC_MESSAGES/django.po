@@ -1,0 +1,100 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-05-01 08:57+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: movies/apps.py:8
+msgid "Movies"
+msgstr "Movies"
+
+#: movies/filters.py:8
+msgid "role"
+msgstr "role"
+
+#: movies/filters.py:27
+msgid "genre"
+msgstr "genre"
+
+#: movies/mixins.py:8 movies/models.py:89 movies/models.py:105
+#, fuzzy
+#| msgid "created"
+msgid "created_at"
+msgstr "created at"
+
+#: movies/mixins.py:9
+msgid "updated_at"
+msgstr "updated at"
+
+#: movies/models.py:10
+msgid "name"
+msgstr "name"
+
+#: movies/models.py:15 movies/models.py:52
+msgid "description"
+msgstr "description"
+
+#: movies/models.py:23
+msgid "Genre"
+msgstr "Genre"
+
+#: movies/models.py:24
+msgid "Genres"
+msgstr "Genres"
+
+#: movies/models.py:32
+msgid "full_name"
+msgstr "full name"
+
+#: movies/models.py:42
+msgid "Person"
+msgstr "Person"
+
+#: movies/models.py:43
+msgid "Persons"
+msgstr "Persons"
+
+#: movies/models.py:50
+msgid "title"
+msgstr "title"
+
+#: movies/models.py:57
+msgid "creation_date"
+msgstr "release date"
+
+#: movies/models.py:59
+msgid "rating"
+msgstr "rating"
+
+#: movies/models.py:66
+msgid "type"
+msgstr "type"
+
+#: movies/models.py:67
+msgid "file"
+msgstr "file"
+
+#: movies/models.py:79
+msgid "Filmwork"
+msgstr "Filmwork"
+
+#: movies/models.py:80
+msgid "Filmworks"
+msgstr "Filmworks"
+
+#~ msgid "modified"
+#~ msgstr "modified at"
