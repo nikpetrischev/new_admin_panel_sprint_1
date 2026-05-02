@@ -14,7 +14,8 @@ DB_TABLES = ('film_work', 'person', 'genre', 'person_film_work', 'genre_film_wor
 
 
 def load_from_sqlite(sql_conn: sqlite3.Connection, pg_conn: _connection):
-    """Основной метод загрузки данных из SQLite в Postgres"""
+    """Основной метод загрузки данных из SQLite в Postgres."""
+
     postgres_saver = PostgresSaver(pg_conn)
     sqlite_loader = SQLiteLoader(sql_conn)
 

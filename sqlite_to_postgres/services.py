@@ -1,3 +1,5 @@
+"""Набор сервис для ETLпроцесса."""
+
 import sqlite3
 from contextlib import contextmanager
 from dataclasses import astuple, fields
@@ -39,6 +41,8 @@ def conn_context(db_path: str) -> Generator[sqlite3.Connection, None, None]:
 
 
 class SQLiteLoader:
+    """Загрузчик данных из SQLite3."""
+
     DB_PATH = 'db.sqlite'
 
     def __init__(self, connection: sqlite3.Connection):
@@ -75,6 +79,8 @@ class SQLiteLoader:
 
 
 class PostgresSaver:
+    """Сервис записи в Postgresql."""
+
     def __init__(self, pg_conn: connection_):
         self.pg_conn = pg_conn
 

@@ -1,3 +1,8 @@
+"""
+Набор базовых тестов для проверки корректности выполнения ETL процесса.
+В дальнейшем стоит пеервести на pytest и добавить в CI/CD.
+"""
+
 from dataclasses import asdict
 from datetime import datetime
 import logging
@@ -25,6 +30,11 @@ DATACLASSES_MAPPER = {
 
 
 def test_identical_number_of_rows(sqlite_curs, pg_curs):
+    """
+    Положительный тест на соответствие кол-ва строк записей
+    в таблицах SQLite3 и Postgresql.
+    """
+
     sqlite_row_count = {}
     pg_row_count = {}
 
@@ -43,6 +53,11 @@ def test_identical_number_of_rows(sqlite_curs, pg_curs):
 
 
 def test_row_data_consistency(sqlite_curs, pg_curs):
+    """
+    Положительный тест на соответствие содержимого записей
+    в таблицах SQLite3 и Postgresql.
+    """
+
     for table_name in DB_TABLES:
         sqlite_query = (
             sql.SQL('SELECT * FROM {};')
@@ -81,6 +96,11 @@ def test_row_data_consistency(sqlite_curs, pg_curs):
 
 @contextmanager
 def stream_warning():
+    """
+    Контекстный менеджер для мьюта логгера на уровне INFO
+    на время прохождения тестов.
+    """
+
     sh = next(
         h for h in logger.handlers
         if isinstance(h, logging.StreamHandler)
@@ -98,6 +118,8 @@ def stream_warning():
 
 
 def run_tests(sqlite_conn, pg_conn):
+    """Временный раннер для тестов до встройки их в CI/CD."""
+
     with (
         closing(sqlite_conn.cursor()) as sqlite_curs,
         closing(pg_conn.cursor(row_factory=dict_row)) as pg_curs,
@@ -113,6 +135,8 @@ def run_tests(sqlite_conn, pg_conn):
 
 
 if __name__ == '__main__':
+    """Старт тестов в отрыве от самого ETL процессса."""
+
     from sqlite_to_postgres.load_data import load_from_sqlite
 
     logger.warning(msg='===== Проверка корректности переноса данных =====')

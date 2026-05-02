@@ -1,3 +1,5 @@
+"""Сущности для потс-инит обработки и хранения сырых данных из БД."""
+
 from abc import ABC
 from datetime import datetime
 import uuid
@@ -6,6 +8,8 @@ from dataclasses import dataclass, field
 
 @dataclass(slots=True)
 class BaseEntity(ABC):
+    """Абстрактная сущность."""
+
     id: uuid.UUID
     created_at: datetime
 
@@ -16,6 +20,8 @@ class BaseEntity(ABC):
 
 @dataclass(slots=True)
 class FilmWork(BaseEntity):
+    """Сущность для таблицы FilmWork."""
+
     title: str
     description: str
     creation_date: str
@@ -32,6 +38,8 @@ class FilmWork(BaseEntity):
 
 @dataclass(slots=True)
 class Genre(BaseEntity):
+    """Сущность для таблицы Genre."""
+
     name: str
     description: str
     updated_at: datetime
@@ -44,12 +52,16 @@ class Genre(BaseEntity):
 
 @dataclass(slots=True)
 class Person(BaseEntity):
+    """Сущность для таблицы Person."""
+
     full_name: str
     updated_at: datetime
 
 
 @dataclass(slots=True)
 class GenreFilmWork(BaseEntity):
+    """Сущность для таблицы GenreFilmWork."""
+
     genre_id: uuid.UUID = field(default_factory=uuid.uuid4)
     film_work_id: uuid.UUID = field(default_factory=uuid.uuid4)
 
@@ -63,6 +75,8 @@ class GenreFilmWork(BaseEntity):
 
 @dataclass(slots=True)
 class PersonFilmWork(BaseEntity):
+    """Сущность для таблицы PersonFilmWork."""
+
     role: str
     person_id: uuid.UUID = field(default_factory=uuid.uuid4)
     film_work_id: uuid.UUID = field(default_factory=uuid.uuid4)

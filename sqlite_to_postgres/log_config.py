@@ -1,3 +1,5 @@
+"""Настройка логгера для двух хэндлеров: в stderr и файл."""
+
 import logging
 
 logger = logging.getLogger('etl_logger')
