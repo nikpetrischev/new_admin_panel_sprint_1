@@ -53,9 +53,23 @@ class GenreFilmWork(BaseEntity):
     genre_id: uuid.UUID = field(default_factory=uuid.uuid4)
     film_work_id: uuid.UUID = field(default_factory=uuid.uuid4)
 
+    def __post_init__(self):
+        BaseEntity.__post_init__(self)
+        if isinstance(self.genre_id, str):
+            self.genre_id = uuid.UUID(self.genre_id)
+        if isinstance(self.film_work_id, str):
+            self.film_work_id = uuid.UUID(self.film_work_id)
+
 
 @dataclass(slots=True)
 class PersonFilmWork(BaseEntity):
     role: str
     person_id: uuid.UUID = field(default_factory=uuid.uuid4)
     film_work_id: uuid.UUID = field(default_factory=uuid.uuid4)
+
+    def __post_init__(self):
+        BaseEntity.__post_init__(self)
+        if isinstance(self.person_id, str):
+            self.person_id = uuid.UUID(self.person_id)
+        if isinstance(self.film_work_id, str):
+            self.film_work_id = uuid.UUID(self.film_work_id)
