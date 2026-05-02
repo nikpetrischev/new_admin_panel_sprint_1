@@ -25,15 +25,15 @@ DATACLASSES_MAPPER = {
     'person_film_work': PersonFilmWork,
 }
 
+
 @contextmanager
 def conn_context(db_path: str) -> Generator[sqlite3.Connection, None, None]:
     conn = sqlite3.connect(db_path)
     conn.row_factory = sqlite3.Row
     try:
         yield conn
-    except BaseException as e:  # TODO: Find out which exception is expected, refactor
-        # TODO: logging
-        ...
+    except Exception as e:
+        logger.error(msg=f'Не удалось подключиться к sqlite3:\n\t{e}')
     finally:
         conn.close()
 
@@ -54,19 +54,19 @@ class SQLiteLoader:
         if batch < 1:
             logger.error(f'Невозможно читать из БД партиями по {batch} элементов')
             raise ValueError(f'Невозможно читать из БД партиями по {batch} элементов')
-        
+
         with conn_context(self.DB_PATH) as conn:
             curs = conn.cursor()
             try:
                 curs.execute(
-                    s:=sql.SQL('SELECT * FROM {0};')
+                    sql.SQL('SELECT * FROM {0};')
                     .format(sql.Identifier(table_name))
                     .as_string(),
                 )
             except Exception as e:
                 logger.error(msg=f'Ошибка исполнения SELECT * FROM {table_name}:\n\t{e}')
                 raise e
-            
+
             while data := curs.fetchmany(batch):
                 result = [DATACLASSES_MAPPER[table_name](**dict(row)) for row in data]
                 yield result
@@ -84,7 +84,7 @@ class PostgresSaver:
         if len(data) == 0:
             logger.error('Нет данных для сохранения')
             raise ValueError('Нет данных для сохранения')
-    
+
         table_name = sql.Identifier(TABLES_MAPPER[type(data[0])])
         column_names = sql.SQL(', ').join([sql.Identifier(field.name) for field in fields(data[0])])
         values_placeholder = sql.SQL(', ').join(sql.Placeholder() * len(fields(data[0])))

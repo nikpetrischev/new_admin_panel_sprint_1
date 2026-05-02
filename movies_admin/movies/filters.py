@@ -21,7 +21,7 @@ class RoleFilter(admin.SimpleListFilter):
         if self.value():
             return queryset.filter(personfilmwork__role=self.value()).distinct()
         return queryset
-    
+
 
 class GenreFilter(admin.SimpleListFilter):
     title = _('genre')

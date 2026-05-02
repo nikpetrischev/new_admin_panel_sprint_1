@@ -8,7 +8,7 @@ from dataclasses import dataclass, field
 class BaseEntity(ABC):
     id: uuid.UUID
     created_at: datetime
-    
+
     def __post_init__(self):
         if isinstance(self.id, str):
             self.id = uuid.UUID(self.id)
@@ -40,6 +40,7 @@ class Genre(BaseEntity):
         BaseEntity.__post_init__(self)
         if self.description and len(self.description) > 1024:
             self.description = self.description[0:1020] + '...'
+
 
 @dataclass(slots=True)
 class Person(BaseEntity):

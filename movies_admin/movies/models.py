@@ -1,4 +1,4 @@
-from django.core.validators import MaxValueValidator, MinValueValidator, MaxLengthValidator
+from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
@@ -14,7 +14,6 @@ class Genre(UUIDMixin, TimeStampedMixin):
     description = models.TextField(
         _('description'),
         blank=False,
-        null=True,
         max_length=1024,
     )
 
@@ -25,7 +24,7 @@ class Genre(UUIDMixin, TimeStampedMixin):
 
     def __str__(self) -> str:
         return self.name
-    
+
 
 class Person(UUIDMixin, TimeStampedMixin):
     full_name = models.TextField(
@@ -33,7 +32,7 @@ class Person(UUIDMixin, TimeStampedMixin):
         blank=False,
         max_length=256,
     )
-    
+
     class Meta:
         db_table = 'person'
         indexes = [
@@ -44,14 +43,13 @@ class Person(UUIDMixin, TimeStampedMixin):
 
     def __str__(self) -> str:
         return self.full_name
-    
+
 
 class FilmWork(UUIDMixin, TimeStampedMixin):
     title = models.TextField(_('title'), blank=False)
     description = models.TextField(
         _('description'),
         blank=True,
-        null=True,
         max_length=1024,
     )
     creation_date = models.DateField(_('creation_date'), null=True)
@@ -64,8 +62,8 @@ class FilmWork(UUIDMixin, TimeStampedMixin):
         ],
     )
     type = models.TextField(_('type'), blank=False, max_length=128)
-    file_path  = models.FileField(_('file'), blank=True, null=True, upload_to='movies/')
-    
+    file_path = models.FileField(_('file'), blank=True, null=True, upload_to='movies/')
+
     genres = models.ManyToManyField(Genre, through='GenreFilmWork')
     persons = models.ManyToManyField(Person, through='PersonFilmWork')
 
@@ -82,8 +80,8 @@ class FilmWork(UUIDMixin, TimeStampedMixin):
     def __str__(self) -> str:
         return self.title
 
-   
-class GenreFilmWork(UUIDMixin):
+
+class GenreFilmWork(UUIDMixin):  # noqa: DJ08
     film_work = models.ForeignKey('FilmWork', on_delete=models.CASCADE)
     genre = models.ForeignKey('Genre', on_delete=models.CASCADE)
     created_at = models.DateTimeField(_('created_at'), auto_now_add=True)
@@ -98,11 +96,11 @@ class GenreFilmWork(UUIDMixin):
         db_table = 'genre_film_work'
 
 
-class PersonFilmWork(UUIDMixin):
+class PersonFilmWork(UUIDMixin):  # noqa: DJ08
     film_work = models.ForeignKey('FilmWork', on_delete=models.CASCADE)
     person = models.ForeignKey('Person', on_delete=models.CASCADE)
     role = models.TextField('role')
-    created_at = models.DateTimeField(_('created_at'), auto_now_add=True) 
+    created_at = models.DateTimeField(_('created_at'), auto_now_add=True)
 
     class Meta:
         constraints = [
