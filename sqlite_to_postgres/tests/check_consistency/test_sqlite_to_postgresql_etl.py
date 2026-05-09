@@ -66,7 +66,6 @@ def test_row_data_consistency(sqlite_curs, pg_curs):
         )
         sqlite_curs.execute(sqlite_query)
         while batch := sqlite_curs.fetchmany(BATCH_SIZE):
-            print(batch)
             id_values = [item['id'] for item in batch]
             placeholders = sql.SQL(', ').join(sql.Placeholder() * len(id_values))
             pg_query = (
